@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Observable, of } from 'rxjs';
 import {LocationService} from "../location.service";
 
 @Component({
@@ -9,8 +10,11 @@ export class ZipcodeEntryComponent {
 
   constructor(private service : LocationService) { }
 
-  addLocation(zipcode : string){
-    this.service.addLocation(zipcode);
+  addLocation(zipcode : string):Observable<any> {
+    if(zipcode?.length > 0) {
+      return this.service.addLocation(zipcode);
+    }
+    return of(1);
   }
 
 }

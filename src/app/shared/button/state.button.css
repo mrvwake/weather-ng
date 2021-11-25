@@ -1,0 +1,13 @@
+.loader {
+  width: 20px;
+  height: 20px;
+}
+
+.btn-warning,
+.btn-warning:hover,
+.btn-warning:active,
+.btn-warning:visited,
+.btn-warning:focus {
+    background-color: yellow;
+    border-color: darkkhaki;
+}

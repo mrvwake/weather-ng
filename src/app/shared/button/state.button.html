@@ -1,0 +1,29 @@
+<button
+  class="btn"
+  [disabled]="state !== states.NORMAL"
+  [ngClass]="{
+    'btn-primary': state == states.NORMAL,
+    'btn-success': state == states.DONE,
+    'btn-warning': state == states.LOADING
+  }"
+  (click)="onClick()"
+>
+  <ng-container *ngIf="state == states.NORMAL">
+    <span #normal>
+      <ng-content select="[normal]"></ng-content> 
+    </span>
+    <span *ngIf="normal.children.length === 0">Save</span>
+  </ng-container>
+  <ng-container *ngIf="state == states.LOADING">
+    <span #loading><ng-content select="[loading]"></ng-content> </span>
+    <span *ngIf="loading.children.length === 0">
+      <img class="loader" src="./assets/icons/loader.gif"/>
+    </span>
+  </ng-container>
+  <ng-container *ngIf="state == states.DONE">
+    <span #done>
+      <ng-content select="[done]"></ng-content>
+    </span>
+    <span *ngIf="done.children.length === 0">Saved!</span>
+  </ng-container>
+</button>
