@@ -1,7 +1,8 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Observable, Subscription, timer } from 'rxjs';
+import { combineLatest, Observable, Subscription, timer } from 'rxjs';
 import { WeatherService } from "./weather.service";
 import { HttpClient } from "@angular/common/http";
+import { switchMap } from 'rxjs/operators';
 
 export const LOCATIONS : string = "locations";
 
@@ -26,12 +27,16 @@ export class LocationService implements OnDestroy {
     if (locString)
       this.locations = JSON.parse(locString);
   
-    this.subscription = timer(0, 30000).subscribe((value) => {
-      for (let loc of this.locations) {
-        this.weatherService.clearCurrentConditions();
-        this.weatherService.addCurrentConditions(loc.countryCode, loc.zipCode).subscribe();
-      }
-    });
+    this.subscription = timer(0, 30000)
+    .pipe(switchMap(() => {
+        const httpCalls = [];
+        for (let loc of this.locations) {
+          this.weatherService.clearCurrentConditions();
+          httpCalls.push(this.weatherService.addCurrentConditions(loc.countryCode, loc.zipCode));
+        }
+        return combineLatest(httpCalls);
+    }))
+    .subscribe(() => {});
   }
 
   addLocation(countryCode: string, zipCode : string): Observable<any>{
