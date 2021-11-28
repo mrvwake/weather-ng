@@ -14,14 +14,14 @@ export class WeatherService {
 
   constructor(private http: HttpClient) { }
 
-  addCurrentConditions(countryCode, zipCode: string): Observable<any> {
+  addCurrentConditions(countryCode: string, zipCode: string): Observable<any> {
     // Here we make a request to get the curretn conditions data from the API. Note the use of backticks and an expression to insert the zipcode
     return this.http.get(`${WeatherService.URL}/weather?zip=${zipCode},${countryCode}&units=imperial&APPID=${WeatherService.APPID}`)
       .pipe(
         catchError(() => {
           return throwError('No Data Found');
         }),
-        map(data => this.currentConditions.push({zip: countryCode, data: data})),
+        map(data => this.currentConditions.push({zip: zipCode, countryCode, data: data})),
       );
   }
 
@@ -36,10 +36,9 @@ export class WeatherService {
     return this.currentConditions;
   }
 
-  getForecast(zipcode: string): Observable<any> {
+  getForecast(countryCode: string, zipcode: string): Observable<any> {
     // Here we make a request to get the forecast data from the API. Note the use of backticks and an expression to insert the zipcode
-    return this.http.get(`${WeatherService.URL}/forecast/daily?zip=${zipcode},us&units=imperial&cnt=5&APPID=${WeatherService.APPID}`);
-
+    return this.http.get(`${WeatherService.URL}/forecast/daily?zip=${zipcode},${countryCode}&units=imperial&cnt=5&APPID=${WeatherService.APPID}`);
   }
 
   getWeatherIcon(id){

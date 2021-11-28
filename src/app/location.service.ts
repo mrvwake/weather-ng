@@ -41,13 +41,12 @@ export class LocationService {
   }
 
   removeLocation(zipcode : string){
-    //TODO
-    /*let index = this.locations.indexOf(zipcode);
+    let index = this.locations.findIndex((item) => item.zipCode === zipcode)
     if (index !== -1){
       this.locations.splice(index, 1);
       localStorage.setItem(LOCATIONS, JSON.stringify(this.locations));
       this.weatherService.removeCurrentConditions(zipcode);
-    }*/
+    }
   }
 
   getCountries(): Observable<Country[]> {
