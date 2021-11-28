@@ -25,13 +25,8 @@ export class LocationService implements OnDestroy {
     let locString = localStorage.getItem(LOCATIONS);
     if (locString)
       this.locations = JSON.parse(locString);
-
-    for (let loc of this.locations) {
-      this.weatherService.clearCurrentConditions();
-      this.weatherService.addCurrentConditions(loc.countryCode, loc.zipCode).subscribe();
-    }
   
-    this.subscription = timer(3000, 5000).subscribe((value) => {
+    this.subscription = timer(0, 30000).subscribe((value) => {
       for (let loc of this.locations) {
         this.weatherService.clearCurrentConditions();
         this.weatherService.addCurrentConditions(loc.countryCode, loc.zipCode).subscribe();
