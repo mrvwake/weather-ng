@@ -10,18 +10,20 @@ import { Country, LocationService } from "../location.service";
 })
 export class ZipcodeEntryComponent implements OnInit, OnDestroy {
 
-  countries: string[] = [];
-  country = '';
+  countriesOptions: string[] = [];
+  countries: Country[] = [];
+  countryCode = '';
   zipcode = '';
   error = '';
-  btnHandler: Subject<boolean> = new Subject();
+  btnHandler: Subject<any> = new Subject();
   destroyUntil: Subject<boolean> = new Subject();
 
   constructor(private service : LocationService) { }
 
   ngOnInit() {
     this.service.getCountries().pipe(takeUntil(this.destroyUntil)).subscribe((list: Country[]) =>{
-      this.countries = list.map((c) => c.name);
+      this.countriesOptions = list.map((c) => c.name);
+      this.countries = list;
     });
   }
 
@@ -30,17 +32,19 @@ export class ZipcodeEntryComponent implements OnInit, OnDestroy {
   }
 
   addLocation() {
-    if(this.zipcode?.length && this.country?.length) {
-      this.service.addLocation(this.country, this.zipcode)
+    this.error = '';
+    if(this.zipcode?.length && this.countryCode?.length) {
+      this.service.addLocation(this.countryCode, this.zipcode)
       .pipe(takeUntil(this.destroyUntil))
       .subscribe(() => {
-        this.btnHandler.next(true);
+        this.btnHandler.next();
       }, (error) => {
         this.error = error;
-        this.btnHandler.next(true);
+        this.btnHandler.next();
       });
     } else {
-      this.btnHandler.next(true);
+      this.error = 'Please enter correct values';
+      this.btnHandler.next();
     }
   }
 
@@ -51,7 +55,12 @@ export class ZipcodeEntryComponent implements OnInit, OnDestroy {
     this.zipcode = event.target['value'];
   }
 
-  onCountrySelect(country: string) {
-    this.country = country;
+  onCountrySelect(countryName: string) {
+    const country = this.countries.filter((item: Country) => item.name === countryName)[0];
+    if(country) {
+      this.countryCode = country.code;
+    } else {
+      this.countryCode = '';
+    }
   }
 }

@@ -9,35 +9,45 @@ export interface Country {
   name: string;
   code: string;
 }
+
+export interface Location {
+  zipCode : string,
+  countryCode : string;
+}
 @Injectable()
 export class LocationService {
 
-  locations : string[] = [];
+  locations : Location[] = [];
 
   constructor(private httpClient: HttpClient, 
     private weatherService : WeatherService) {
-    localStorage.setItem(LOCATIONS, JSON.stringify([]));
-   /* let locString = localStorage.getItem(LOCATIONS);
-    console.log(this.locations, locString);
+    let locString = localStorage.getItem(LOCATIONS);
     if (locString)
       this.locations = JSON.parse(locString);
-    for (let loc of this.locations)
-      this.weatherService.addCurrentConditions(loc);*/
+    
+    for (let loc of this.locations) {
+      this.weatherService.addCurrentConditions(loc.countryCode, loc.zipCode).subscribe();
+    }
   }
 
-  addLocation(country: string, zipcode : string): Observable<any>{
-    this.locations.push(zipcode);
+  addLocation(countryCode: string, zipCode : string): Observable<any>{
+    let location = {
+      countryCode,
+      zipCode
+    }
+    this.locations.push(location);
     localStorage.setItem(LOCATIONS, JSON.stringify(this.locations));
-    return this.weatherService.addCurrentConditions(zipcode);
+    return this.weatherService.addCurrentConditions(countryCode, zipCode);
   }
 
   removeLocation(zipcode : string){
-    let index = this.locations.indexOf(zipcode);
+    //TODO
+    /*let index = this.locations.indexOf(zipcode);
     if (index !== -1){
       this.locations.splice(index, 1);
       localStorage.setItem(LOCATIONS, JSON.stringify(this.locations));
       this.weatherService.removeCurrentConditions(zipcode);
-    }
+    }*/
   }
 
   getCountries(): Observable<Country[]> {
