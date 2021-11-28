@@ -1,0 +1,21 @@
+<div class="well">
+  <h2>Enter a country:</h2>
+  <typeahead name="country" 
+      placeholder="Country" 
+      (select)="onCountrySelect($event)"
+      [options]="countries">
+  </typeahead>
+  <br> 
+  <h2>Enter a zipcode:</h2>
+  <input type="text" (keyup)="onZipChange($event)" placeholder="Zipcode" class="form-control"/>
+  <br>
+  <state-button [handler]="btnHandler" (action)="addLocation()">
+    <span normal> Add location </span>
+    <span loading> Adding... </span>
+    <span done>
+      <i class="bi bi-check-circle"></i>
+      Done
+    </span>
+  </state-button>
+  <div class="error" *ngIf="error.length > 0">{{error}}</div>
+</div>

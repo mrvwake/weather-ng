@@ -3,11 +3,32 @@
   height: 20px;
 }
 
-.btn-warning,
-.btn-warning:hover,
-.btn-warning:active,
-.btn-warning:visited,
-.btn-warning:focus {
-    background-color: yellow;
-    border-color: darkkhaki;
+.btn-done,
+.btn-done:hover,
+.btn-done:active,
+.btn-done:visited,
+.btn-done:focus {
+  background-color: darkgreen;
+  color: white;
+  border-color: green;
+}
+
+.btn-normal,
+.btn-normal:hover,
+.btn-normal:active,
+.btn-normal:visited,
+.btn-normal:focus {
+  background-color: blue;
+  color: white;
+  border-color: darkblue;
+}
+
+.btn-loading,
+.btn-loading:hover,
+.btn-loading:active,
+.btn-loading:visited,
+.btn-loading:focus {
+  background-color: yellow;
+  color: black;
+  border-color: yellowgreen;
 }

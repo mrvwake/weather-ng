@@ -1,12 +1,12 @@
 <button
   class="btn"
-  [disabled]="state !== states.NORMAL"
   [ngClass]="{
-    'btn-primary': state == states.NORMAL,
-    'btn-success': state == states.DONE,
-    'btn-warning': state == states.LOADING
+    'btn-normal': state == states.NORMAL,
+    'btn-done': state == states.DONE,
+    'btn-loading': state == states.LOADING
   }"
-  (click)="onClick()"
+  [disabled]="state !== states.NORMAL"
+  (click)="onClick($event)"
 >
   <ng-container *ngIf="state == states.NORMAL">
     <span #normal>

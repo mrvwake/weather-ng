@@ -1,0 +1,17 @@
+<input
+    class="form-control"
+    [placeholder]="placeholder"
+    [type]="type"
+    (blur)="hasFocus = false"
+    (focus)="hasFocus = true"
+    [(ngModel)]="value"
+    (input)="inputChange($event)"
+/>
+<div *ngIf="hasFocus" class="options-box">
+    <div
+        class="option"
+        *ngFor="let option of optionsFiltered"
+        (mousedown)="selected(option)">
+        {{ option }}
+    </div>
+</div>

@@ -1,0 +1,22 @@
+:host {
+    position: relative;
+    background-color: white;
+    display: block;
+}
+
+.options-box {
+    position: absolute;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.1);
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+.option {
+    cursor: pointer;
+    padding: 5px 10px;
+}
+.option:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}

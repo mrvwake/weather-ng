@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import {Observable} from 'rxjs';
+import {Observable, of, throwError} from 'rxjs';
 
 import {HttpClient} from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable()
 export class WeatherService {
@@ -17,7 +17,12 @@ export class WeatherService {
   addCurrentConditions(zipcode: string): Observable<any> {
     // Here we make a request to get the curretn conditions data from the API. Note the use of backticks and an expression to insert the zipcode
     return this.http.get(`${WeatherService.URL}/weather?zip=${zipcode},us&units=imperial&APPID=${WeatherService.APPID}`)
-      .pipe(map(data => this.currentConditions.push({zip: zipcode, data: data})));
+      .pipe(
+        catchError(() => {
+          return throwError('No Data Found');
+        }),
+        map(data => this.currentConditions.push({zip: zipcode, data: data})),
+      );
   }
 
   removeCurrentConditions(zipcode: string) {
