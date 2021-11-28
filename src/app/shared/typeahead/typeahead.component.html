@@ -11,7 +11,9 @@
     <div
         class="option"
         *ngFor="let option of optionsFiltered"
-        (mousedown)="selected(option)">
+        (mousedown)="selected(option)"
+        searchMatch="{{ option }}"
+        [searchValue]="value">
         {{ option }}
     </div>
 </div>
