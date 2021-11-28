@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Observable, Subscription, timer } from 'rxjs';
 import { WeatherService } from "./weather.service";
 import { HttpClient } from "@angular/common/http";
 
@@ -15,19 +15,28 @@ export interface Location {
   countryCode : string;
 }
 @Injectable()
-export class LocationService {
+export class LocationService implements OnDestroy {
 
   locations : Location[] = [];
+  private subscription: Subscription;
 
   constructor(private httpClient: HttpClient, 
     private weatherService : WeatherService) {
     let locString = localStorage.getItem(LOCATIONS);
     if (locString)
       this.locations = JSON.parse(locString);
-    
+
     for (let loc of this.locations) {
+      this.weatherService.clearCurrentConditions();
       this.weatherService.addCurrentConditions(loc.countryCode, loc.zipCode).subscribe();
     }
+  
+    this.subscription = timer(3000, 5000).subscribe((value) => {
+      for (let loc of this.locations) {
+        this.weatherService.clearCurrentConditions();
+        this.weatherService.addCurrentConditions(loc.countryCode, loc.zipCode).subscribe();
+      }
+    });
   }
 
   addLocation(countryCode: string, zipCode : string): Observable<any>{
@@ -51,5 +60,9 @@ export class LocationService {
 
   getCountries(): Observable<Country[]> {
     return this.httpClient.get<Country[]>("assets/data/countries.json");
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

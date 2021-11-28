@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import {Observable, of, throwError} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 
 import {HttpClient} from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 
 @Injectable()
-export class WeatherService {
+export class WeatherService  {
 
   static URL = 'http://api.openweathermap.org/data/2.5';
   static APPID = '5a4b2d457ecbef9eb2a71e480b947604';
@@ -34,6 +34,10 @@ export class WeatherService {
 
   getCurrentConditions(): any[] {
     return this.currentConditions;
+  }
+
+  clearCurrentConditions() {
+    this.currentConditions = [];
   }
 
   getForecast(countryCode: string, zipcode: string): Observable<any> {
